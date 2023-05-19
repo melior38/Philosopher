@@ -20,7 +20,7 @@ RESETTXT = \033[0m
 BOLD = \033[1m
 
 SRC_PATH = philosopher_file/src/
-SRC = main.c Philosopher.c
+SRC = main.c thread.c utils.c
 SRCS = $(addprefix $(SRC_PATH),$(SRC))
 
 OBJ_PATH = philosopher_file/obj/
@@ -35,7 +35,7 @@ RM		= rm -f
 INCLUDES = -I philosopher_file/includes/ -I ./ft_printf/ft_printf/
 
 OPTIONS = -L ./ft_printf/ft_printf 
-CFLAGS = -g -pthread -fsanitize=address
+CFLAGS = -g -pthread 
 
 all: $(NAME)
 

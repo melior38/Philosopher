@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/19 17:04:40 by marvin            #+#    #+#             */
-/*   Updated: 2023/05/19 17:04:40 by marvin           ###   ########.fr       */
+/*   Created: 2023/05/19 17:04:32 by marvin            #+#    #+#             */
+/*   Updated: 2023/05/19 17:04:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,15 @@
 #include <time.h>
 #include <math.h>
 
-int	main(int ac, char **av)
+void	*routine(/*void *arg*/)// tu veut lui passez la struct ducoup
 {
-	// pthread_mutex_t mutex;
-	t_rules	rules;
+	return 0;
+}
+
+int	make_philo_thread(t_rules *rules)
+{
+	pthread_t philo[rules->number_of_philosophers];
+
 	
-	if (ac < 5 || ac > 6)
-	{
-		perror("wrong amount of argument");// a changer par un printf
-		return (1);
-	}
-	if (make_rules(&rules, av, ac))
-		return (1);
-	// make_philo_thread(&rules);
 	return (0);
 }
