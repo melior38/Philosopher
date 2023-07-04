@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosopher.h"
+#include "Philosopher.h"
 
 
 int	main(int ac, char **av)
@@ -25,10 +25,7 @@ int	main(int ac, char **av)
 	}
 	if (make_rules(&rules, av, ac))
 		return (1);
-	usleep(15000);
-	print_action(&rules, 1, "has eaten");
-	usleep(15000);
-	print_action(&rules, 2, "has eaten");
+	// print_philo(&rules);
 	// make_philo_thread(&rules);
 	return (0);
 }

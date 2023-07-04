@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosopher.h"
+#include "Philosopher.h"
 
 int	ft_atoi(char *str)
 {
@@ -76,7 +76,6 @@ int	input_check(char **av, int ac)
 		ret = -1;
 	if (ret == -1)
 		printf("invalid argument, make sure to only input numbers\n");
-	printf("ret = %d\n", ret);
 	return (ret);
 }
 
@@ -85,7 +84,6 @@ int	make_rules(t_rules *rules, char **av, int ac)
 	// if (input_check(av, ac) != 0);
 	// 	return 1;
 	input_check(av, ac);
-	printf("euh hello\n");
 	rules->number_of_philosophers = ft_atoi(av[1]);
 	rules->time_to_die = ft_atoi(av[2]);
 	rules->time_to_eat = ft_atoi(av[3]);
@@ -100,6 +98,6 @@ int	make_rules(t_rules *rules, char **av, int ac)
 	if (make_mutex(rules))
 		return (1);
 	rules->prog_debut = get_time_in_ms();
-	// init
+	init_philo(rules);
 	return (0);
 }
