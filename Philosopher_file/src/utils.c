@@ -81,13 +81,14 @@ int	input_check(char **av, int ac)
 
 int	make_rules(t_rules *rules, char **av, int ac)
 {
-	// if (input_check(av, ac) != 0);
-	// 	return 1;
 	input_check(av, ac);
+	// we need a validity check of the numbers
 	rules->number_of_philosophers = ft_atoi(av[1]);
 	rules->time_to_die = ft_atoi(av[2]);
 	rules->time_to_eat = ft_atoi(av[3]);
 	rules->time_to_sleep = ft_atoi(av[4]);
+	rules->dieded = 0;
+	rules->meal_finished = 0;
 	if (ac == 6)
 		rules->N_O_T_each_philosopher_must_eat = ft_atoi(av[5]);
 	else
@@ -97,7 +98,6 @@ int	make_rules(t_rules *rules, char **av, int ac)
 		return (1);
 	if (make_mutex(rules))
 		return (1);
-	rules->prog_debut = get_time_in_ms();
 	init_philo(rules);
 	return (0);
 }

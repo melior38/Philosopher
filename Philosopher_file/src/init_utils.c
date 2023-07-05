@@ -53,6 +53,8 @@ void	set_philo(t_rules *rules, int actual_philo)
 		philo[actual_philo].left_fork_id = actual_philo - 1;
 	philo[actual_philo].right_fork_id = actual_philo;
 	philo[actual_philo].last_meal = 0;
+	philo[actual_philo].philo_id = (actual_philo + 1);
+	philo[actual_philo].rules = rules;
 }
 
 void	init_philo(t_rules *rules)
@@ -77,17 +79,27 @@ void	print_philo(t_rules *rules)
 		printf("philo number %d\n\n", i + 1);
 		printf("left_fork_id = [%d]\n", rules->philosopher[i].left_fork_id);
 		printf("right_fork_id = [%d]\n", rules->philosopher[i].right_fork_id);
-		printf("last_meal = [%lld]\n\n", rules->philosopher[i].last_meal);
+		printf("x_meal = [%d]\n", rules->philosopher[i].x_meal);
+		printf("philo_id = [%d]\n\n", rules->philosopher[i].philo_id);
 		i++;
 	}
 }
 
-void	print_action(t_rules *rules, int philo_id, char *print)
+void	print_action(t_rules *rules, int philo_id, char *print, int color)
 {
 	pthread_mutex_lock(&(rules->write_lock));
 	// check si la variable dead est set et tout ce qui pourrait faire arreter le print
-	printf("%lld ", get_time_in_ms() - rules->prog_debut);
-	printf("philo[%d] ", philo_id);
+	if (color == 0)
+		printf("%s", CYAN);
+	else if (color == 1)
+		printf("%s", RED);
+	else if (color == 2)
+		printf("%s", GREEN);
+	else if (color == 3)
+		printf("%s", PURPLE);
+	printf("%lldms ", get_time_in_ms() - rules->prog_debut);
+	printf("%d ", philo_id);
 	printf("%s\n", print);
+	printf("%s", RESET);
 	pthread_mutex_unlock(&(rules->write_lock));
 }

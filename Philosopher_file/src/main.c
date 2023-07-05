@@ -26,6 +26,6 @@ int	main(int ac, char **av)
 	if (make_rules(&rules, av, ac))
 		return (1);
 	// print_philo(&rules);
-	// make_philo_thread(&rules);
+	make_philo_thread(&rules);
 	return (0);
 }

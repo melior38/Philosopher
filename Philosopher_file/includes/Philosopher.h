@@ -19,10 +19,19 @@
 # include <stdlib.h>
 # include <string.h>
 # include <pthread.h>
+# define CYAN "\033[0;36m" 
+# define GREEN "\033[0;32m"
+# define RED "\033[0;31m" 
+# define PURPLE "\033[0;35m"
+# define RESET "\033[0m"
+
+
 
 typedef struct s_philosopher {
 	int					left_fork_id;
 	int					right_fork_id;
+	int					philo_id;
+	int					x_meal;
 	pthread_t			thread;
 	long long			last_meal;
 	struct s_rules		*rules;
@@ -35,6 +44,7 @@ typedef struct s_rules {
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					dieded;
+	int					meal_finished;
 	int					N_O_T_each_philosopher_must_eat;
 	long long			prog_debut;
 	t_philosopher		philosopher[250];
@@ -53,8 +63,11 @@ long long		get_time_in_ms(void);
 void			print_philo(t_rules *rules);
 void			set_philo(t_rules *rules, int actual_philo);
 int				make_mutex(t_rules *rules);
+void			dynamic_sleep(long long t_to_sleep, t_rules *rules);
+long long		time_diff(long long past, long long pres);
 void			init_philo(t_rules *rules);
-void			print_action(t_rules *rules, int philo_id, char *print);
+void			philo_eats(t_philosopher *philo);
+void			print_action(t_rules *rules, int philo_id, char *print, int color);
 // int		philo(pthread_t *th, int nmb_of_dice_rolling);
 // void	*roll_dice();
 // void	print_int_tab(int **th_tab, int i);
