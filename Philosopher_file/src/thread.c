@@ -20,7 +20,7 @@ void	philo_eats(t_philosopher *philo)
 	pthread_mutex_lock(&rules->fork[philo->right_fork_id]);
 	print_action(rules, philo->philo_id, "has taken a fork", 0);
 	pthread_mutex_lock(&rules->fork[philo->left_fork_id]);
-	print_action(rules, philo->philo_id, "has taken a secund fork", 0);
+	print_action(rules, philo->philo_id, "has taken a fork", 0);
 	pthread_mutex_lock(&rules->death_lock);
 	print_action(rules, philo->philo_id, "is eating", 2);
 	// printf("what's the problem ? [%d]\n", philo->philo_id);
@@ -86,10 +86,11 @@ void	death_checker(t_rules *rules)
 			rules->N_O_T_each_philosopher_must_eat == -1)
 	{
 		i = -1;
-		while (++i < rules->number_of_philosophers && rules->dieded != 0)
+		// printf("dieded = {%d}", rules->dieded);
+		while (++i < rules->number_of_philosophers && rules->dieded == 0)
 		{
 			pthread_mutex_lock(&rules->death_lock);
-			if (time_diff(philo[i].last_meal, get_time_in_ms()) <= rules->time_to_die)
+			if (time_diff(philo[i].last_meal, get_time_in_ms()) >= rules->time_to_die)
 			{
 				print_action(rules, philo[i].philo_id, "died", 1);
 				rules->dieded = 1;
