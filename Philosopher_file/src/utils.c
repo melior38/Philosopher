@@ -61,28 +61,33 @@ int	av_check(char *av)
 
 int	input_check(char **av, int ac)
 {
-	int ret;
-
-	ret = 0; 
 	if (av_check(av[1]))
-		ret = -1;
+		return (1);
 	if (av_check(av[2]))
-		ret = -1;
+		return (1);
 	if (av_check(av[3]))
-		ret = -1;
+		return (1);
 	if (av_check(av[4]))
-		ret = -1;
+		return (1);
 	if (ac == 6 && av_check(av[5]) == 1)
-		ret = -1;
-	if (ret == -1)
-		printf("invalid argument, make sure to only input numbers\n");
-	return (ret);
+		return (1);
+	return (0);
 }
 
 int	make_rules(t_rules *rules, char **av, int ac)
 {
-	input_check(av, ac);
-	// we need a validity check of the numbers
+	if (input_check(av, ac))
+	{
+		printf("invalid argument, make sure to only input numbers\n");
+		return (1);
+	}
+	if (validity_check(av, ac) == 2)
+		return (1);
+	else if (validity_check(av, ac) == 1)
+	{
+		printf("wrong number of philo\n");
+		return (1);
+	}
 	rules->number_of_philosophers = ft_atoi(av[1]);
 	rules->time_to_die = ft_atoi(av[2]);
 	rules->time_to_eat = ft_atoi(av[3]);

@@ -19,12 +19,18 @@ void	philo_eats(t_philosopher *philo)
 	rules = philo->rules;
 	pthread_mutex_lock(&rules->fork[philo->right_fork_id]);
 	print_action(rules, philo->philo_id, "has taken a fork", 0);
-	pthread_mutex_lock(&rules->fork[philo->left_fork_id]);
+	if (philo->left_fork_id == philo->right_fork_id)
+	{
+		pthread_mutex_unlock(&rules->fork[philo->right_fork_id]);
+		return ;
+	}
+	else
+		pthread_mutex_lock(&rules->fork[philo->left_fork_id]);
 	print_action(rules, philo->philo_id, "has taken a fork", 0);
 	pthread_mutex_lock(&rules->death_lock);
 	print_action(rules, philo->philo_id, "is eating", 2);
-	// printf("what's the problem ? [%d]\n", philo->philo_id);
 	philo->last_meal = get_time_in_ms();
+	philo->x_meal += 1;
 	pthread_mutex_unlock(&rules->death_lock);
 	dynamic_sleep(rules->time_to_eat, rules);
 	pthread_mutex_unlock(&rules->fork[philo->right_fork_id]);
@@ -45,9 +51,13 @@ void	*routine(void *arg)// tu veut lui passez la struct ducoup
 		philo_eats(philo);
 		if (rules->meal_finished != 0)
 			break ;
+		if (philo->left_fork_id == philo->right_fork_id)
+			break ;
 		print_action(rules, philo->philo_id, "is sleeping", 0);
 		dynamic_sleep(rules->time_to_sleep, rules);
 		print_action(rules, philo->philo_id, "is thinking", 3);
+		if (rules->number_of_philosophers == 1)
+			break ;
 	}
 	return (NULL);
 }
@@ -82,15 +92,14 @@ void	death_checker(t_rules *rules)
 	int				i;
 	
 	philo = rules->philosopher;
-	while (rules->meal_finished != rules->N_O_T_each_philosopher_must_eat || 
-			rules->N_O_T_each_philosopher_must_eat == -1)
+	while ((rules->meal_finished != rules->N_O_T_each_philosopher_must_eat || 
+			rules->N_O_T_each_philosopher_must_eat == -1) && rules->dieded != 1 && rules->meal_finished != 1)
 	{
 		i = -1;
-		// printf("dieded = {%d}", rules->dieded);
 		while (++i < rules->number_of_philosophers && rules->dieded == 0)
 		{
 			pthread_mutex_lock(&rules->death_lock);
-			if (time_diff(philo[i].last_meal, get_time_in_ms()) >= rules->time_to_die)
+			if (time_diff(philo[i].last_meal, get_time_in_ms()) > rules->time_to_die)
 			{
 				print_action(rules, philo[i].philo_id, "died", 1);
 				rules->dieded = 1;

@@ -45,6 +45,10 @@ void	set_philo(t_rules *rules, int actual_philo)
 	if (rules->number_of_philosophers == 1)
 	{
 		philo[actual_philo].right_fork_id = actual_philo;
+		philo[actual_philo].left_fork_id = 0;
+		philo[actual_philo].last_meal = get_time_in_ms();
+		philo[actual_philo].philo_id = (actual_philo + 1);
+		philo[actual_philo].rules = rules;
 		return ;
 	}
 	if( actual_philo == 0)
@@ -52,7 +56,7 @@ void	set_philo(t_rules *rules, int actual_philo)
 	else
 		philo[actual_philo].left_fork_id = actual_philo - 1;
 	philo[actual_philo].right_fork_id = actual_philo;
-	philo[actual_philo].last_meal = 0;
+	philo[actual_philo].last_meal = get_time_in_ms();
 	philo[actual_philo].philo_id = (actual_philo + 1);
 	philo[actual_philo].rules = rules;
 }
@@ -88,6 +92,11 @@ void	print_philo(t_rules *rules)
 void	print_action(t_rules *rules, int philo_id, char *print, int color)
 {
 	pthread_mutex_lock(&(rules->write_lock));
+	if (rules->dieded == 1 || rules->meal_finished == 1)
+	{
+		pthread_mutex_unlock(&(rules->write_lock));
+		return ;
+	}
 	// check si la variable dead est set et tout ce qui pourrait faire arreter le print
 	if (color == 0)
 		printf("%s", CYAN);

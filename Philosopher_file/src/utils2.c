@@ -6,7 +6,7 @@
 /*   By: asouchet <asouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:35:51 by asouchet          #+#    #+#             */
-/*   Updated: 2023/07/05 13:44:20 by asouchet         ###   ########.fr       */
+/*   Updated: 2023/07/06 14:14:52 by asouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,14 @@ void	dynamic_sleep(long long t_to_sleep, t_rules *rules)
 long long	time_diff(long long past, long long pres)
 {
 	return (pres - past);
+}
+
+int	validity_check(char **av, int ac)
+{
+	if (ft_atoi(av[1]) >= 201 || ft_atoi(av[1]) <= 0)
+		return (1);
+	if (ac == 6)
+		if (ft_atoi(av[5]) == 0)
+			return (2);
+	return (0);
 }

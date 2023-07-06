@@ -35,7 +35,7 @@ RM		= rm -f
 INCLUDES = -I philosopher_file/includes/ -I ./ft_printf/ft_printf/
 
 OPTIONS = -L ./ft_printf/ft_printf
-CFLAGS = -g -pthread -fsanitize=address
+CFLAGS = -g -pthread -Werror -Wextra -Wall -fsanitize=address
 
 all: $(NAME)
 

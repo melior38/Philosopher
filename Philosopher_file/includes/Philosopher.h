@@ -40,7 +40,7 @@ typedef struct s_philosopher {
 
 typedef struct s_rules {
 	int					number_of_philosophers; 
-	int					time_to_die;
+	long long			time_to_die;
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					dieded;
@@ -68,6 +68,7 @@ long long		time_diff(long long past, long long pres);
 void			init_philo(t_rules *rules);
 void			philo_eats(t_philosopher *philo);
 void			print_action(t_rules *rules, int philo_id, char *print, int color);
+int				validity_check(char **av, int ac);
 // int		philo(pthread_t *th, int nmb_of_dice_rolling);
 // void	*roll_dice();
 // void	print_int_tab(int **th_tab, int i);
