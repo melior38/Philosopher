@@ -14,7 +14,7 @@
 
 long long	get_time_in_ms(void)
 {
-	struct timeval    tp;
+	struct timeval	tp;
 
 	gettimeofday(&tp, NULL);
 	return (tp.tv_sec * 1000 + tp.tv_usec / 1000);
@@ -22,7 +22,7 @@ long long	get_time_in_ms(void)
 
 int	make_mutex(t_rules *rules)
 {
-	int i;
+	int	i;
 
 	i = rules->number_of_philosophers;
 	while (--i >= 0)
@@ -97,14 +97,13 @@ void	print_action(t_rules *rules, int philo_id, char *print, int color)
 		pthread_mutex_unlock(&(rules->write_lock));
 		return ;
 	}
-	// check si la variable dead est set et tout ce qui pourrait faire arreter le print
-	if (color == 0)
+	if (color == 0 && rules->dieded != 1)
 		printf("%s", CYAN);
-	else if (color == 1)
+	else if (color == 1 && rules->dieded != 1)
 		printf("%s", RED);
-	else if (color == 2)
+	else if (color == 2 && rules->dieded != 1)
 		printf("%s", GREEN);
-	else if (color == 3)
+	else if (color == 3 && rules->dieded != 1)
 		printf("%s", PURPLE);
 	printf("%lldms ", get_time_in_ms() - rules->prog_debut);
 	printf("%d ", philo_id);

@@ -34,7 +34,7 @@ RM		= rm -f
 
 INCLUDES = -I philosopher_file/includes/
 
-CFLAGS = -g -pthread -Werror -Wextra -Wall -fsanitize=thread
+CFLAGS = -g -pthread -Werror -Wextra -Wall #-fsanitize=thread
 
 all: $(NAME)
 

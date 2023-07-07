@@ -27,13 +27,13 @@ void	philo_eats(t_philosopher *philo)
 	else
 		pthread_mutex_lock(&rules->fork[philo->left_fork_id]);
 	print_action(rules, philo->philo_id, "has taken a fork", 0);
-	pthread_mutex_lock(&rules->death_lock);
 	print_action(rules, philo->philo_id, "is eating", 2);
+	pthread_mutex_lock(&rules->death_lock);
 	philo->last_meal = get_time_in_ms();
+	pthread_mutex_unlock(&rules->death_lock);
 	pthread_mutex_lock(&rules->write_lock);
 	philo->x_meal += 1;
 	pthread_mutex_unlock(&rules->write_lock);
-	pthread_mutex_unlock(&rules->death_lock);
 	dynamic_sleep(rules->time_to_eat, rules);
 	pthread_mutex_unlock(&rules->fork[philo->right_fork_id]);
 	pthread_mutex_unlock(&rules->fork[philo->left_fork_id]);
@@ -50,9 +50,14 @@ void	*routine(void *arg)
 		usleep(15000);
 	while (rules->dieded == 0)
 	{
-		philo_eats(philo);
+		pthread_mutex_lock(&rules->write_lock);
 		if (rules->meal_finished != 0)
+		{
+			pthread_mutex_unlock(&rules->write_lock);
 			break ;
+		}
+		pthread_mutex_unlock(&rules->write_lock);
+		philo_eats(philo);
 		if (philo->left_fork_id == philo->right_fork_id)
 			break ;
 		print_action(rules, philo->philo_id, "is sleeping", 0);
@@ -92,8 +97,7 @@ void	death_checker(t_rules *rules)
 	int				i;
 	
 	philo = rules->philosopher;
-	while ((rules->meal_finished != rules->N_O_T_each_philosopher_must_eat || 
-			rules->N_O_T_each_philosopher_must_eat == -1) && rules->dieded != 1 && rules->meal_finished != 1)
+	while (1)
 	{
 		i = -1;
 		while (++i < rules->number_of_philosophers && rules->dieded == 0)
@@ -114,8 +118,13 @@ void	death_checker(t_rules *rules)
 				&& philo[i].x_meal >= rules->N_O_T_each_philosopher_must_eat)
 			i++;
 		pthread_mutex_unlock(&rules->write_lock);
-		if (i == rules->number_of_philosophers)
+		if (i == rules->number_of_philosophers || rules->dieded == 1)
+		{
+			pthread_mutex_lock(&rules->write_lock);
 			rules->meal_finished = 1;
+			pthread_mutex_unlock(&rules->write_lock);
+			break ;
+		}
 	}
 }
 

@@ -85,7 +85,7 @@ int	make_rules(t_rules *rules, char **av, int ac)
 		return (1);
 	else if (validity_check(av, ac) == 1)
 	{
-		printf("wrong number of philo\n");
+		printf("wrong inputs pls make sure to be reasonnable\n");
 		return (1);
 	}
 	rules->number_of_philosophers = ft_atoi(av[1]);
