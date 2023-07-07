@@ -30,14 +30,16 @@ void	philo_eats(t_philosopher *philo)
 	pthread_mutex_lock(&rules->death_lock);
 	print_action(rules, philo->philo_id, "is eating", 2);
 	philo->last_meal = get_time_in_ms();
+	pthread_mutex_lock(&rules->write_lock);
 	philo->x_meal += 1;
+	pthread_mutex_unlock(&rules->write_lock);
 	pthread_mutex_unlock(&rules->death_lock);
 	dynamic_sleep(rules->time_to_eat, rules);
 	pthread_mutex_unlock(&rules->fork[philo->right_fork_id]);
 	pthread_mutex_unlock(&rules->fork[philo->left_fork_id]);
 }
 
-void	*routine(void *arg)// tu veut lui passez la struct ducoup
+void	*routine(void *arg)
 {
 	t_philosopher	*philo;
 	t_rules			*rules;
@@ -62,7 +64,7 @@ void	*routine(void *arg)// tu veut lui passez la struct ducoup
 	return (NULL);
 }
 
-void	end_thread(t_rules *rules)
+int	end_thread(t_rules *rules)
 {
 	int	i;
 
@@ -70,10 +72,7 @@ void	end_thread(t_rules *rules)
 	while (i < rules->number_of_philosophers)
 	{
 		if (pthread_join(rules->philosopher[i].thread , NULL))
-		{
-				perror("thread joining problem:");
-				exit (1);
-		} 
+				return (1);
 		i++;
 	}
 	i = 0;
@@ -84,6 +83,7 @@ void	end_thread(t_rules *rules)
 	}
 	pthread_mutex_destroy(&rules->write_lock);
 	pthread_mutex_destroy(&rules->death_lock);
+	return (0);
 }
 
 void	death_checker(t_rules *rules)
@@ -102,20 +102,24 @@ void	death_checker(t_rules *rules)
 			if (time_diff(philo[i].last_meal, get_time_in_ms()) > rules->time_to_die)
 			{
 				print_action(rules, philo[i].philo_id, "died", 1);
+				pthread_mutex_lock(&rules->write_lock);
 				rules->dieded = 1;
+				pthread_mutex_unlock(&rules->write_lock);
 			}
 			pthread_mutex_unlock(&rules->death_lock);
 		}
 		i = 0;
+		pthread_mutex_lock(&rules->write_lock);
 		while (i < rules->number_of_philosophers && rules->N_O_T_each_philosopher_must_eat != -1 
 				&& philo[i].x_meal >= rules->N_O_T_each_philosopher_must_eat)
 			i++;
+		pthread_mutex_unlock(&rules->write_lock);
 		if (i == rules->number_of_philosophers)
 			rules->meal_finished = 1;
 	}
 }
 
-void	make_philo_thread(t_rules *rules)
+int	make_philo_thread(t_rules *rules)
 {
 	int	i;
 
@@ -124,13 +128,11 @@ void	make_philo_thread(t_rules *rules)
 	while (i < rules->number_of_philosophers)
 	{
 		if (pthread_create(&(rules->philosopher[i].thread) , NULL, &routine, rules->philosopher + i))
-		{
-				perror("thread create problem:");
-				exit (1);
-		}
+				return (1);
 		i++;
 	}
 	death_checker(rules);
-	end_thread(rules);
-// 	return (0);
+	if (end_thread(rules))
+		return (1);
+	return (0);
 }

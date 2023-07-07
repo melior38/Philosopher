@@ -15,17 +15,19 @@
 
 int	main(int ac, char **av)
 {
-	// pthread_mutex_t mutex;
 	t_rules	rules;
 	
 	if (ac < 5 || ac > 6)
 	{
-		perror("wrong amount of argument");// a changer par un printf
+		perror("wrong amount of argument");
 		return (1);
 	}
 	if (make_rules(&rules, av, ac))
 		return (1);
-	// print_philo(&rules);
-	make_philo_thread(&rules);
+	if (make_philo_thread(&rules))
+	{
+		printf("error occurred with either creating/joining thread\n");
+		return (1);
+	}
 	return (0);
 }

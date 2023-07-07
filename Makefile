@@ -32,22 +32,16 @@ AR 		= ar rcs
 CC		= gcc
 RM		= rm -f
 
-INCLUDES = -I philosopher_file/includes/ -I ./ft_printf/ft_printf/
+INCLUDES = -I philosopher_file/includes/
 
-OPTIONS = -L ./ft_printf/ft_printf
-CFLAGS = -g -pthread -Werror -Wextra -Wall -fsanitize=address
+CFLAGS = -g -pthread -Werror -Wextra -Wall -fsanitize=thread
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 		$(ECHO) "$(YELLOW)Compilation de Philosopher...$(RESETTXT)"
-		@ cd ./ft_printf/ft_printf && $(MAKE)
-		@ gcc $(CFLAGS) $(INCLUDES) $(OPTIONS) $(OBJS) -o $@ 
+		@ gcc $(CFLAGS) $(INCLUDES) $(OBJS) -o $@ 
 		$(ECHO) "$(GREEN)$(BOLD)Compilation Terminée !!!$(RESETTXT)"
-
-bonus: $(NAME)
-		cd ./ft_printf/ft_printf && cp ft_printf/libftprintf.a ./Philosopher_file/philosopher.a
-		$(AR) philosopher.a $(OBJS)
 
 %.o:$(SRC_PATH)%.c
 		$(PRINT) "$(YELLOW)Generation des objets...$(RESETTXT)\r"
@@ -57,13 +51,11 @@ bonus: $(NAME)
 clean:
 		$(ECHO) "$(RED)Suppression des objets...$(RESETTXT)"
 		@$(RM) $(OBJS)
-		@cd ./ft_printf/ft_printf && $(MAKE) clean
 		$(ECHO) "$(GREEN)$(BOLD)Terminé !$(RESETTXT)"
 
 fclean:	clean
 		$(ECHO) "$(RED)Suppression de pipex et libft.a...$(RESETTXT)"
 		@$(RM) $(NAME)
-		@cd ./ft_printf/ft_printf && $(MAKE) fclean
 		$(ECHO) "$(GREEN)$(BOLD)Terminé !$(RESETTXT)"
 		
 re:		fclean all
