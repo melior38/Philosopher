@@ -76,18 +76,8 @@ int	input_check(char **av, int ac)
 
 int	make_rules(t_rules *rules, char **av, int ac)
 {
-	if (input_check(av, ac))
-	{
-		printf("invalid argument, make sure to only input numbers\n");
+	if (error_management(av, ac))
 		return (1);
-	}
-	if (validity_check(av, ac) == 2)
-		return (1);
-	else if (validity_check(av, ac) == 1)
-	{
-		printf("wrong inputs pls make sure to be reasonnable\n");
-		return (1);
-	}
 	rules->number_of_philosophers = ft_atoi(av[1]);
 	rules->time_to_die = ft_atoi(av[2]);
 	rules->time_to_eat = ft_atoi(av[3]);
@@ -95,11 +85,11 @@ int	make_rules(t_rules *rules, char **av, int ac)
 	rules->dieded = 0;
 	rules->meal_finished = 0;
 	if (ac == 6)
-		rules->N_O_T_each_philosopher_must_eat = ft_atoi(av[5]);
+		rules->meal_number = ft_atoi(av[5]);
 	else
-		rules->N_O_T_each_philosopher_must_eat = -1;
-	if (rules->number_of_philosophers < 0 || rules->time_to_die < 0 || rules->time_to_eat < 0
-			|| rules->number_of_philosophers > 250)
+		rules->meal_number = -1;
+	if (rules->number_of_philosophers < 0 || rules->time_to_die < 0 
+		|| rules->time_to_eat < 0 || rules->number_of_philosophers > 250)
 		return (1);
 	if (make_mutex(rules))
 		return (1);

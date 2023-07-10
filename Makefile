@@ -20,7 +20,7 @@ RESETTXT = \033[0m
 BOLD = \033[1m
 
 SRC_PATH = philosopher_file/src/
-SRC = main.c thread.c utils.c init_utils.c utils2.c
+SRC = main.c thread.c utils.c init_utils.c utils2.c utils3.c
 SRCS = $(addprefix $(SRC_PATH),$(SRC))
 
 OBJ_PATH = philosopher_file/obj/

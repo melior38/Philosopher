@@ -25,8 +25,6 @@
 # define PURPLE "\033[0;35m"
 # define RESET "\033[0m"
 
-
-
 typedef struct s_philosopher {
 	int					left_fork_id;
 	int					right_fork_id;
@@ -45,7 +43,7 @@ typedef struct s_rules {
 	int					time_to_sleep;
 	int					dieded;
 	int					meal_finished;
-	int					N_O_T_each_philosopher_must_eat;
+	int					meal_number;
 	long long			prog_debut;
 	t_philosopher		philosopher[250];
 	pthread_mutex_t		fork[250];
@@ -68,10 +66,9 @@ void			dynamic_sleep(long long t_to_sleep, t_rules *rules);
 long long		time_diff(long long past, long long pres);
 void			init_philo(t_rules *rules);
 void			philo_eats(t_philosopher *philo);
-void			print_action(t_rules *rules, int philo_id, char *print, int color);
+void			print_action(t_rules *r, int philo_id, char *print, int color);
 int				validity_check(char **av, int ac);
-// int		philo(pthread_t *th, int nmb_of_dice_rolling);
-// void	*roll_dice();
-// void	print_int_tab(int **th_tab, int i);
+void			death(t_rules *rules, int *i);
+int				error_management(char **av, int ac);
 
 #endif

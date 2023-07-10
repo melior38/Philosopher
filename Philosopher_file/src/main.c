@@ -12,14 +12,13 @@
 
 #include "Philosopher.h"
 
-
 int	main(int ac, char **av)
 {
 	t_rules	rules;
-	
+
 	if (ac < 5 || ac > 6)
 	{
-		perror("wrong amount of argument");
+		printf("wrong amount of argument\n0");
 		return (1);
 	}
 	if (make_rules(&rules, av, ac))

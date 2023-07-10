@@ -39,7 +39,7 @@ int	make_mutex(t_rules *rules)
 
 void	set_philo(t_rules *rules, int actual_philo)
 {
-	t_philosopher *philo;
+	t_philosopher	*philo;
 
 	philo = rules->philosopher;
 	if (rules->number_of_philosophers == 1)
@@ -51,7 +51,7 @@ void	set_philo(t_rules *rules, int actual_philo)
 		philo[actual_philo].rules = rules;
 		return ;
 	}
-	if( actual_philo == 0)
+	if (actual_philo == 0)
 		philo[actual_philo].left_fork_id = rules->number_of_philosophers - 1;
 	else
 		philo[actual_philo].left_fork_id = actual_philo - 1;
@@ -71,43 +71,4 @@ void	init_philo(t_rules *rules)
 		set_philo(rules, i);
 		i++;
 	}
-}
-
-void	print_philo(t_rules *rules)
-{
-	int	i;
-
-	i = 0;
-	while (i < rules->number_of_philosophers)
-	{
-		printf("philo number %d\n\n", i + 1);
-		printf("left_fork_id = [%d]\n", rules->philosopher[i].left_fork_id);
-		printf("right_fork_id = [%d]\n", rules->philosopher[i].right_fork_id);
-		printf("x_meal = [%d]\n", rules->philosopher[i].x_meal);
-		printf("philo_id = [%d]\n\n", rules->philosopher[i].philo_id);
-		i++;
-	}
-}
-
-void	print_action(t_rules *rules, int philo_id, char *print, int color)
-{
-	pthread_mutex_lock(&(rules->write_lock));
-	if (rules->dieded == 1 || rules->meal_finished == 1)
-	{
-		pthread_mutex_unlock(&(rules->write_lock));
-		return ;
-	}
-	if (color == 0 && rules->dieded != 1)
-		printf("%s", CYAN);
-	else if (color == 1 && rules->dieded != 1)
-		printf("%s", RED);
-	else if (color == 2 && rules->dieded != 1)
-		printf("%s", GREEN);
-	else if (color == 3 && rules->dieded != 1)
-		printf("%s", PURPLE);
-	printf("%lldms ", get_time_in_ms() - rules->prog_debut);
-	printf("%d ", philo_id);
-	printf("%s\n", print);
-	printf("%s", RESET);
-	pthread_mutex_unlock(&(rules->write_lock));
 }
